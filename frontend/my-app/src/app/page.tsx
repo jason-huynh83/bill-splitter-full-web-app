@@ -6,9 +6,9 @@ interface ParsedRow {
   Quantity: number;
   Item: string;
   price: number;
-  // Additional keys will be added dynamically (everyone, names, _selected)
-  [key: string]: any;
+  [key: string]: number | string | boolean | unknown;
 }
+
 
 export default function ReceiptPage() {
   // States for names, file, parsed data, and loading
