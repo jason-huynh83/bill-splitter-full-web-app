@@ -6,7 +6,9 @@ interface ParsedRow {
   Quantity: number;
   Item: string;
   price: number;
-  [key: string]: number | string | boolean | unknown;
+  _selected: boolean;
+  everyone: boolean;
+  [key: string]: number | string | boolean;
 }
 
 
