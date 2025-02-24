@@ -35,23 +35,63 @@ export default function ReceiptPage() {
   // Handle file input change
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]);
+      const selectedFile = e.target.files[0];
+      console.log('File selected:', selectedFile);
+      console.log('File type:', selectedFile.type, 'File size:', selectedFile.size);
+      setFile(selectedFile);
+    } else {
+      console.log('No file selected');
     }
   };
-
+  
   // Convert file to a base64 encoded string
   const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.readAsDataURL(file);
+      
       reader.onload = () => {
-        const base64String = (reader.result as string).split(',')[1];
-        resolve(base64String);
+        const img = new Image();
+        img.onload = () => {
+          // Create a canvas and set its dimensions to, for example, 800px wide (adjust as needed)
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 800;
+          const scaleSize = MAX_WIDTH / img.width;
+          canvas.width = MAX_WIDTH;
+          canvas.height = img.height * scaleSize;
+          
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            reject('Canvas context not available');
+            return;
+          }
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          
+          // Get the compressed base64 data URL
+          const dataURL = canvas.toDataURL('image/jpeg', 0.8); // quality set to 0.8 (adjust as needed)
+          // Remove the data URL prefix to match your current format
+          const base64String = dataURL.split(',')[1];
+          console.log('Processed base64 image via canvas');
+          resolve(base64String);
+        };
+        
+        // Set image source from file reader result (ensure it's a string)
+        if (typeof reader.result === 'string') {
+          img.src = reader.result;
+        } else {
+          reject('FileReader result is not a string');
+        }
       };
-      reader.onerror = error => reject(error);
+      
+      reader.onerror = error => {
+        console.error('FileReader error:', error);
+        reject(error);
+      };
+      
+      // Start reading the file
+      reader.readAsDataURL(file);
     });
   };
-
+  
   // Handle receipt parsing
   const handleUpload = async () => {
     if (!file) return;
