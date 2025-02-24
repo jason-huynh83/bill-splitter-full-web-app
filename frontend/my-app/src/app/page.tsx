@@ -71,11 +71,12 @@ export default function ReceiptPage() {
       let parsedData: ParsedRow[] = jsonData.parsed_data;
       // Add internal _selected property and columns for "everyone" and each name
       parsedData = parsedData.map(row => {
-        const newRow = { ...row, _selected: false, everyone: false };
+        const newRow = { ...row, _selected: false, everyone: false } as ParsedRow;
         names.forEach(name => {
           newRow[name] = false;
         });
         return newRow;
+
       });
       setData(parsedData);
     } catch (error) {
@@ -350,7 +351,7 @@ export default function ReceiptPage() {
                         <td key={idx} className="px-4 py-2 border w-24 text-center">
                           <input
                             type="checkbox"
-                            checked={row[name]}
+                            checked={!!row[name]}
                             onChange={() => handleCheckboxChange(index, name)}
                           />
                         </td>
