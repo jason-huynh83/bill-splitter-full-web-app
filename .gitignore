@@ -1,0 +1,11 @@
+# Node modules for the frontend
+frontend/node_modules/
+
+# Python virtual environment
+backend/venv/
+
+# Environment files
+*.env
+
+# Sensitive file with API key
+backend/config.yaml
