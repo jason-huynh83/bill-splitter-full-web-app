@@ -256,6 +256,7 @@ export default function ReceiptPage() {
           <input
             type="file"
             accept="image/*"
+            capture="environment"
             onChange={handleFileChange}
             className="mb-4 p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           />
